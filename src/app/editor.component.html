@@ -1,0 +1,52 @@
+<div
+     class="angular-editor"
+     #angularEditor
+     [style.width]="350"
+     [style.minWidth]="0"
+>
+     <app-toolbar
+          #editorToolbar
+          [showToolbar]="true"
+          [defaultFontName]="'Times New Roman'"
+          [defaultFontSize]="'3'"
+          (execute)="executeCommand($event)"
+     >
+     </app-toolbar>
+
+     <div
+          class="angular-editor-wrapper d-flex justify-content-center"
+          #editorWrapper
+     >
+          <div
+               #editor
+               class="angular-editor-textarea my-5"
+               [attr.contenteditable]="true"
+               [attr.tabindex]="0"
+               [attr.translate]="'yes'"
+               [attr.spellcheck]="true"
+               [ngStyle]="style"
+               (input)="onContentChange($event!.target)"
+               (focus)="onTextAreaFocus($event)"
+               (blur)="onTextAreaBlur($event)"
+               (click)="exec()"
+               (keyup)="exec($event)"
+               (mouseout)="onTextAreaMouseOut($event)"
+               (paste)="onPaste($event)"
+          >
+          </div>
+     </div>
+     <!-- <app-toolbar
+          *ngIf="config.toolbarPosition === 'bottom'"
+          #editorToolbar
+          [id]="id"
+          [uploadUrl]="config.uploadUrl"
+          [upload]="config.upload"
+          [showToolbar]="config.showToolbar !== undefined ? config.showToolbar : true"
+          [fonts]="getFonts()"
+          [customClasses]="config.customClasses"
+          [defaultFontName]="config.defaultFontName"
+          [defaultFontSize]="config.defaultFontSize"
+          [hiddenButtons]="config.toolbarHiddenButtons"
+          (execute)="executeCommand($event)"
+     ></app-toolbar> -->
+</div>
