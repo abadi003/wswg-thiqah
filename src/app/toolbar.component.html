@@ -171,5 +171,10 @@ tabindex="1">
               (click)="triggerCommand('pdf')" [hidden]="isButtonHidden('toggleEditorMode')" tabindex="1"><i
         class='fa fa-file-pdf-o'></i></button>
     </div>
+    <div class="angular-editor-toolbar-set">
+      <button [id]="'toggleEditorMode-'+id" type="button" title="save template" class="angular-editor-button"
+              (click)="triggerCommand('save')" [hidden]="isButtonHidden('toggleEditorMode')" tabindex="1"><i
+        class='fa fa-file-pdf-o'></i></button>
+    </div>
     <ng-content></ng-content>
   </div>

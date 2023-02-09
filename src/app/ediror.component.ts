@@ -156,6 +156,8 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
           case "pdf":
             this.printPdf()
             break;
+          case "save":
+            this.createTemplate()
             default:
               break;
             }
@@ -515,6 +517,10 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
     }
   
     return new Blob(byteArrays, { type: contentType });
+  }
+
+  createTemplate(){
+    
   }
 
 }

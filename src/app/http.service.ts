@@ -12,4 +12,8 @@ export class HttpService{
         console.log(html.toString())
         return this.httpClient.post<{data:string}>("http://localhost:3000" , {data:html.toString()})
     }
+
+    createPdf(){
+        
+    }
 }
