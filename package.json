@@ -24,6 +24,7 @@
     "@kolkov/angular-editor": "^3.0.0-beta.0",
     "angular-froala-wysiwyg": "^4.0.15",
     "bootstrap": "^5.2.2",
+    "jspdf": "^2.5.1",
     "ngx-quill": "^19.0.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

@@ -152,8 +152,6 @@ import {
       if (!this.opened) {
         return;
       }
-      // console.log($event.key);
-      // if (KeyCode[$event.key]) {
       switch ($event.key) {
         case 'ArrowDown':
           this._handleArrowDown($event);
@@ -178,9 +176,6 @@ import {
           this._handleBackspace();
           break;
       }
-      // } else if ($event.key && $event.key.length === 1) {
-      // this._keyPress$.next($event.key.toLocaleLowerCase());
-      // }
     }
   
     _handleArrowDown($event: KeyboardEvent) {

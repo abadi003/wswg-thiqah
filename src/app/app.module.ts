@@ -11,6 +11,7 @@ import { EditorService } from './editor.service';
 import { ToolBarComponent } from './toolbar.component';
 import { EditorComponent } from './ediror.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { HttpService } from './http.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     HttpClientModule,
     FontAwesomeModule
   ],
-  providers: [EditorService],
+  providers: [EditorService , HttpService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

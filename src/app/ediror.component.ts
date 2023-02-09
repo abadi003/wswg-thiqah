@@ -23,6 +23,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToolBarComponent } from './toolbar.component';
 import { EditorService } from './editor.service';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { HttpService } from './http.service';
 
 @Component({
   selector: 'app-editor',
@@ -100,6 +103,7 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
     private cdRef: ChangeDetectorRef,
     @Attribute('tabindex') defaultTabIndex: string,
     @Attribute('autofocus') private autoFocus: any,
+    private httpService:HttpService
   ) {
     const parsedTabIndex = Number(defaultTabIndex);
     this.tabIndex = (parsedTabIndex || parsedTabIndex === 0) ? parsedTabIndex : null;
@@ -138,14 +142,19 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
       } else if (command === 'default') {
         this.editorService.removeSelectedElements('h1,h2,h3,h4,h5,h6,p,pre');
         this.onContentChange(this.textArea.nativeElement);
-      } 
-      this.cdRef.markForCheck()
+      }
+      else {
+        this.editorService.executeCommand(command, value);
+      }
       switch (command) {
         case "pageSize":
           this.setPageSize(this.editorService.getPageSize())
           break;
           case "margin":
             this.setMargin(this.editorService.getMargin())
+            break;
+          case "pdf":
+            this.printPdf()
             break;
             default:
               break;
@@ -375,18 +384,23 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
    *
    * Send a node array from the contentEditable of the editor
    */
-  exec(event?:any) {
-    if(event){
-      console.log(event?.key)
-    }
+  exec() {
     this.editorToolbar.triggerButtons();
-
     let userSelection;
     if (this.doc.getSelection) {
+      //#TODO
+      if(this.doc.getSelection().anchorNode.textContent){
+        if(this.doc.getSelection().anchorNode.textContent[0].match("^[\u0621-\u064A0-9 ]+$")){
+          console.log(this.doc.getSelection().anchorNode.parentNode)
+          this.doc.getSelection().anchorNode.parentNode.dir= 'rtl'
+        }
+        else{
+          this.doc.getSelection().anchorNode.parentNode.dir= 'ltr'
+        }
+      }
       userSelection = this.doc.getSelection();
       this.editorService.executeInNextQueueIteration(this.editorService.saveSelection);
     }
-
     let a = userSelection.focusNode;
     const els = [];
     while (a && a.id !== 'editor') {
@@ -468,6 +482,39 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
           break;
   
   }
+  }
+
+  printPdf(){
+    let DATA: HTMLElement  = document.getElementById('editor')!;
+    this.httpService.pdf(DATA.outerHTML).subscribe(observer=> {
+      const blob = this.base64toBlob(observer.data , 'application/pdf')
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = `your-file-name.pdf`
+      link.click()
+    })
+  }
+
+  base64toBlob(base64Data: string, contentType = '') {
+    const sliceSize = 1024;
+    const byteCharacters = atob(base64Data);
+    const bytesLength = byteCharacters.length;
+    const slicesCount = Math.ceil(bytesLength / sliceSize);
+    const byteArrays = new Array(slicesCount);
+  
+    for (let sliceIndex = 0; sliceIndex < slicesCount; sliceIndex += 1) {
+      const begin = sliceIndex * sliceSize;
+      const end = Math.min(begin + sliceSize, bytesLength);
+  
+      const bytes = new Array(end - begin);
+      for (let offset = begin, i = 0; offset < end; i += 1, offset += 1) {
+        bytes[i] = byteCharacters[offset].charCodeAt(0);
+      }
+  
+      byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+  
+    return new Blob(byteArrays, { type: contentType });
   }
 
 }

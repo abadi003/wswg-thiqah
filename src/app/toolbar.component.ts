@@ -432,7 +432,6 @@ export class ToolBarComponent implements OnChanges {
 
   focus() {
     this.execute.emit('focus');
-    console.log('focused');
   }
   
 }

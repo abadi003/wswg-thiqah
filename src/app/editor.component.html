@@ -20,6 +20,7 @@
           <div
                #editor
                class="angular-editor-textarea my-5"
+               id="editor"
                [attr.contenteditable]="true"
                [attr.tabindex]="0"
                [attr.translate]="'yes'"
@@ -29,7 +30,7 @@
                (focus)="onTextAreaFocus($event)"
                (blur)="onTextAreaBlur($event)"
                (click)="exec()"
-               (keyup)="exec($event)"
+               (keyup)="exec()"
                (mouseout)="onTextAreaMouseOut($event)"
                (paste)="onPaste($event)"
           >
