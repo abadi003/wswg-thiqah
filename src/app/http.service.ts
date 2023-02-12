@@ -5,15 +5,14 @@ import { HttpClient } from '@angular/common/http';
 export class HttpService{
 
     constructor(public httpClient: HttpClient) {
-        
+
     }
 
     pdf(html:string){
-        console.log(html.toString())
         return this.httpClient.post<{data:string}>("http://localhost:3000" , {data:html.toString()})
     }
 
-    createPdf(){
-        
+    createPdf(templateDto:{name:string , content:string}){
+        // return this.httpClient.post("http://localhost:3000/template" , {name: })
     }
 }

@@ -23,9 +23,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToolBarComponent } from './toolbar.component';
 import { EditorService } from './editor.service';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { HttpService } from './http.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CreatePdfModalComponent } from './create-pdf-modal/create-pdf-modal.component';
 
 @Component({
   selector: 'app-editor',
@@ -103,14 +103,15 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
     private cdRef: ChangeDetectorRef,
     @Attribute('tabindex') defaultTabIndex: string,
     @Attribute('autofocus') private autoFocus: any,
-    private httpService:HttpService
+    private httpService:HttpService,
+    private modalService: NgbModal
   ) {
     const parsedTabIndex = Number(defaultTabIndex);
     this.tabIndex = (parsedTabIndex || parsedTabIndex === 0) ? parsedTabIndex : null;
   }
 
   ngOnInit() {
-    
+
   }
 
   ngAfterViewInit() {
@@ -158,6 +159,7 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
             break;
           case "save":
             this.createTemplate()
+            break;
             default:
               break;
             }
@@ -410,7 +412,7 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
       a = a.parentNode;
     }
     this.editorToolbar.triggerBlocks(els);
-    
+
   }
 
   getFonts() {
@@ -459,11 +461,11 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
         this.style.width = '148mm'
         this.style.height = '210mm'
           break;
-  
+
       default:
           this.editorService.executeCommand("pageSize", value);
           break;
-  
+
   }
   }
 
@@ -478,11 +480,11 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
       case "wide":
         this.style.padding = '1in 2in'
           break;
-  
+
       default:
           this.editorService.executeCommand("pageSize", value);
           break;
-  
+
   }
   }
 
@@ -503,24 +505,29 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
     const bytesLength = byteCharacters.length;
     const slicesCount = Math.ceil(bytesLength / sliceSize);
     const byteArrays = new Array(slicesCount);
-  
+
     for (let sliceIndex = 0; sliceIndex < slicesCount; sliceIndex += 1) {
       const begin = sliceIndex * sliceSize;
       const end = Math.min(begin + sliceSize, bytesLength);
-  
+
       const bytes = new Array(end - begin);
       for (let offset = begin, i = 0; offset < end; i += 1, offset += 1) {
         bytes[i] = byteCharacters[offset].charCodeAt(0);
       }
-  
+
       byteArrays[sliceIndex] = new Uint8Array(bytes);
     }
-  
+
     return new Blob(byteArrays, { type: contentType });
   }
 
   createTemplate(){
-    
+    this.open()
+    // this.httpService.createPdf()
   }
+
+  open() {
+		this.modalService.open(CreatePdfModalComponent);
+	}
 
 }

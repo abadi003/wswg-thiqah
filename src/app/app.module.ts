@@ -12,13 +12,15 @@ import { ToolBarComponent } from './toolbar.component';
 import { EditorComponent } from './ediror.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpService } from './http.service';
+import { CreatePdfModalComponent } from './create-pdf-modal/create-pdf-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SelectComponent,
     ToolBarComponent,
-    EditorComponent
+    EditorComponent,
+    CreatePdfModalComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +28,7 @@ import { HttpService } from './http.service';
     AngularEditorModule,
     FormsModule,
     HttpClientModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   providers: [EditorService , HttpService],
   bootstrap: [AppComponent]
