@@ -6,13 +6,14 @@ import { AppComponent } from './app.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { SelectComponent } from './select.component';
-import { EditorService } from './editor.service';
-import { ToolBarComponent } from './toolbar.component';
-import { EditorComponent } from './ediror.component';
+import { SelectComponent } from './select/select.component';
+import { EditorService } from './editor/editor.service';
+import { ToolBarComponent } from './toolbar/toolbar.component';
+import { EditorComponent } from './editor/ediror.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { HttpService } from './http.service';
+import { HttpService } from './services/http.service';
 import { CreatePdfModalComponent } from './create-pdf-modal/create-pdf-modal.component';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { CreatePdfModalComponent } from './create-pdf-modal/create-pdf-modal.com
     FormsModule,
     HttpClientModule,
     FontAwesomeModule,
+    NgbModalModule,
   ],
   providers: [EditorService , HttpService],
   bootstrap: [AppComponent]

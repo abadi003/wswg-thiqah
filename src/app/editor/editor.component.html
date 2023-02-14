@@ -13,29 +13,34 @@
      >
      </app-toolbar>
 
+
      <div
-          class="angular-editor-wrapper d-flex justify-content-center"
-          #editorWrapper
+     class="angular-editor-wrapper d-flex justify-content-center"
+     #editorWrapper
      >
-          <div
-               #editor
-               class="angular-editor-textarea my-5"
-               id="editor"
-               [attr.contenteditable]="true"
-               [attr.tabindex]="0"
-               [attr.translate]="'yes'"
-               [attr.spellcheck]="true"
-               [ngStyle]="style"
-               (input)="onContentChange($event!.target)"
-               (focus)="onTextAreaFocus($event)"
-               (blur)="onTextAreaBlur($event)"
-               (click)="exec()"
-               (keyup)="exec()"
-               (mouseout)="onTextAreaMouseOut($event)"
-               (paste)="onPaste($event)"
-          >
-          </div>
+     <div *ngIf="view">
+       <iframe class="m-1 border" *ngFor="let html of htmls" [srcdoc]="html.content" frameborder="0"></iframe>
      </div>
+            <div
+            *ngIf="!view"
+                 #editor
+                 class="angular-editor-textarea my-5"
+                 id="editor"
+                 [attr.contenteditable]="true"
+                 [attr.tabindex]="0"
+                 [attr.translate]="'yes'"
+                 [attr.spellcheck]="true"
+                 [ngStyle]="style"
+                 (input)="onContentChange($event!.target)"
+                 (focus)="onTextAreaFocus($event)"
+                 (blur)="onTextAreaBlur($event)"
+                 (click)="exec()"
+                 (keyup)="exec()"
+                 (mouseout)="onTextAreaMouseOut($event)"
+                 (paste)="onPaste($event)"
+            >
+            </div>
+          </div>
      <!-- <app-toolbar
           *ngIf="config.toolbarPosition === 'bottom'"
           #editorToolbar

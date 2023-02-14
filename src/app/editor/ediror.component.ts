@@ -21,11 +21,11 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ToolBarComponent } from './toolbar.component';
+import { ToolBarComponent } from '../toolbar/toolbar.component';
 import { EditorService } from './editor.service';
-import { HttpService } from './http.service';
+import { HttpService } from '../services/http.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CreatePdfModalComponent } from './create-pdf-modal/create-pdf-modal.component';
+import { CreatePdfModalComponent } from '../create-pdf-modal/create-pdf-modal.component';
 
 @Component({
   selector: 'app-editor',
@@ -51,6 +51,8 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
   focused = false;
   touched = false;
   changed = false;
+  view:boolean =false
+  htmls!:any[]
 
   style = {
     width:'210mm',
@@ -115,7 +117,9 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
   }
 
   ngAfterViewInit() {
-      this.focus();
+    setTimeout(() => {
+        this.focus();
+    }, 1000);
   }
 
   onPaste(event: ClipboardEvent){
@@ -159,7 +163,13 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
             break;
           case "save":
             this.createTemplate()
+            break
+          case "getTemplates":
+            this.getTemplates()
             break;
+          case "edit":
+            this.edit()
+            break
             default:
               break;
             }
@@ -218,7 +228,7 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
    */
   focus() {
     if (this.modeVisual) {
-      this.textArea.nativeElement.focus();
+      this.textArea?.nativeElement.focus();
     } else {
       const sourceText = this.doc.getElementById('sourceText' + this.id);
       sourceText.focus();
@@ -522,12 +532,28 @@ export class EditorComponent implements OnInit, ControlValueAccessor, AfterViewI
   }
 
   createTemplate(){
-    this.open()
-    // this.httpService.createPdf()
+    this.open().then(name => {
+      this.httpService.createPdf({
+        name:name,
+        content:document.getElementById('editor')!.outerHTML,
+        projectId:1
+      }).subscribe()
+    })
   }
 
   open() {
-		this.modalService.open(CreatePdfModalComponent);
+		return this.modalService.open(CreatePdfModalComponent , {centered: true}).result;
 	}
+
+  getTemplates(){
+    this.httpService.getTemplates().subscribe(template =>{
+      this.htmls=template
+      this.view = true
+    })
+  }
+
+  edit(){
+    this.view = false
+  }
 
 }

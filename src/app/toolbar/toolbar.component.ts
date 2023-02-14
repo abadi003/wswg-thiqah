@@ -3,12 +3,12 @@ import { HttpEvent, HttpResponse } from '@angular/common/http';
 import { Component, ElementRef, EventEmitter, Inject, Input, OnChanges, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { SelectOption, CustomClass, UploadResponse } from '@kolkov/angular-editor';
 import { Observable } from 'rxjs';
-import { EditorService } from './editor.service';
+import { EditorService } from '../editor/editor.service';
 
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['../app.component.scss']
 })
 export class ToolBarComponent implements OnChanges {
   title = 'wswg-thiqah';
@@ -105,7 +105,7 @@ export class ToolBarComponent implements OnChanges {
   fontNames: SelectOption[] = [
     {
       label: 'Times New Roman',
-      value: 'Times New Roman',
+      value: 'Arial, Helvetica, sans-serif',
     },
   ];
 
@@ -160,7 +160,7 @@ export class ToolBarComponent implements OnChanges {
   @Input()
   uploadUrl!: string;
   @Input()
-  upload!: (file: File) => Observable<HttpEvent<UploadResponse>>;
+  upload!: (file: File) => Observable<HttpResponse<UploadResponse>>;
   @Input()
   showToolbar!: boolean;
   @Input() fonts: SelectOption[] = [{label: '', value: ''}];
@@ -263,7 +263,7 @@ export class ToolBarComponent implements OnChanges {
         const node = nodes.find(x => {
           if (x instanceof Element) {
             return x.className === y.class;
-          
+
         }
         return false
       });
@@ -325,6 +325,7 @@ export class ToolBarComponent implements OnChanges {
 
   /** insert color */
   insertColor(color: string, where: string) {
+    document.documentElement.style.setProperty(`--${where}`, color);
     this.editorService.insertColor(color, where);
     this.execute.emit('');
   }
@@ -380,7 +381,7 @@ export class ToolBarComponent implements OnChanges {
   //       if (this.upload) {
   //         this.upload(file).subscribe((response: HttpResponse<UploadResponse>) => this.watchUploadImage(response, event));
   //       } else if (this.uploadUrl) {
-  //           this.editorService.uploadImage(file).subscribe((response: HttpResponse<UploadResponse>) => this.watchUploadImage(response, event));
+  //           this.editorService.uploadImage(file).subscribe((response: HttpEvent<UploadResponse>) => this.watchUploadImage(response as HttpResponse<UploadResponse>, event));
   //       } else {
   //         const reader = new FileReader();
   //         reader.onload = (e: ProgressEvent) => {
@@ -433,5 +434,5 @@ export class ToolBarComponent implements OnChanges {
   focus() {
     this.execute.emit('focus');
   }
-  
+
 }

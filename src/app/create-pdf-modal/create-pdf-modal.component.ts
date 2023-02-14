@@ -8,6 +8,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class CreatePdfModalComponent implements OnInit {
 
+  name!: string;
+
   constructor(public activeModal: NgbActiveModal) { }
 
   ngOnInit(): void {

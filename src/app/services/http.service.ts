@@ -12,7 +12,11 @@ export class HttpService{
         return this.httpClient.post<{data:string}>("http://localhost:3000" , {data:html.toString()})
     }
 
-    createPdf(templateDto:{name:string , content:string}){
-        // return this.httpClient.post("http://localhost:3000/template" , {name: })
+    createPdf(templateDto:{name:string , content:string , projectId:number}){
+        return this.httpClient.post("http://localhost:3000/template" , templateDto)
+    }
+
+    getTemplates(){
+      return this.httpClient.get<any>("http://localhost:3000/template")
     }
 }

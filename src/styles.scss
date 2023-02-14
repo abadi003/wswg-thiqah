@@ -320,7 +320,7 @@ a {
         width: 15px;
         height: 2px;
         z-index: 0;
-        background: #1b1b1b;
+        background: var(--textColor)
       }
     }
   }
